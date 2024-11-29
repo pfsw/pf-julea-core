@@ -1,6 +1,6 @@
 /**
  * Checks if the dependency elements in the given POM have no version set.
- * If that's the case, a version element will be added from the according resolved
+ * If that's the case, a version element will be added from the according reloved
  * runtime dependecy.
  *
  * @param pomXml The XML representation of a POM file.
@@ -36,18 +36,18 @@ ext.fixPomDependencyScopes = { pomXml ->
       {
         def dependency = findProvidedDependency depTag
         if (dependency) 
-        {
+  	    {
           depTag.scope[0].value = 'provided' 
-        }
+  	    }
       }
       if (ext.publishFixScopeCompile)
-      {
-        def dependency = findCompileDependency depTag
-        if (dependency) 
-        {
-           depTag.scope[0].value = 'compile' 
-        }
-      }
+  	  {
+    		def dependency = findCompileDependency depTag
+    		if (dependency) 
+    		{
+    		   depTag.scope[0].value = 'compile' 
+    		}
+  	  }
     }
   }
 }
@@ -60,8 +60,11 @@ ext.removeAllPomDependencies = { pomXml ->
 }
 
 ext.findCompileDependency = { depTag ->
-  return configurations.compile.resolvedConfiguration.firstLevelModuleDependencies.find { dep ->
-    (dep.moduleGroup == depTag.groupId.text()) && (dep.moduleName == depTag.artifactId.text())
+  if (configurations.hasProperty('compile'))
+  {
+	  return configurations.compile.resolvedConfiguration.firstLevelModuleDependencies.find { dep ->
+	    (dep.moduleGroup == depTag.groupId.text()) && (dep.moduleName == depTag.artifactId.text())
+	  }
   }
 }
 
