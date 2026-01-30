@@ -1,10 +1,11 @@
 // ===========================================================================
 // AUTHOR   : Manfred Duchrow
-// VERSION  : 1.0 - 27/08/2022
+// VERSION  : 2.0 - 30/01/2026
 // HISTORY  :
 //  27/08/2022  mdu  created
+//  30/01/2026  mdu  changed -> support failure message in assertions
 //
-// Copyright (c) 2022, by MDCS. All rights reserved.
+// Copyright (c) 2022-2026, by MDCS. All rights reserved.
 // ===========================================================================
 package org.pfsw.julea.core.assertions;
 
@@ -18,7 +19,10 @@ import org.pfsw.julea.core.LogLevel;
  */
 public class Junit4LogAssertions
 {
-  private static final LogAssertions ASSERTIONS = new LogAssertions(Assert::assertTrue, Assert::assertFalse);
+  private static final LogAssertions ASSERTIONS = new LogAssertions( //
+      (condition, message) -> Assert.assertTrue(message, condition), //
+      (condition, message) -> Assert.assertFalse(message, condition) //
+  );
 
   /**
    * Asserts that a log entry containing (all) the given text elements was captured by the given log entry tracker.

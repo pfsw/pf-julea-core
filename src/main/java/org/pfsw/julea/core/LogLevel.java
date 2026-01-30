@@ -21,6 +21,11 @@ public enum LogLevel
   WARN;
   //@formatter:on
 
+  public String asString()
+  {
+    return name();
+  }
+
   @Override
   public String toString()
   {
