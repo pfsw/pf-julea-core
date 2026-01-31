@@ -1,5 +1,5 @@
 plugins {
-  id 'signing'
+  id "com.vanniktech.maven.publish" version "0.34.0" // requires Java 11 for build
 }
 
 apply plugin: 'java-library'
@@ -12,7 +12,7 @@ ext {
   javaModuleNameSuffix = 'julea-core'
   autoModuleName = "${group}.${javaModuleNameSuffix}"
   libDisplayName = "PF JUnit Log Event Assertion Core"
-  libDescription = "Library for asserting log events during junit testing"
+  libDescription = "Base library for asserting log events during junit testing"
     
   includePath = project.pfswGradleIncludePath // usually specified in $GRADLE_USER_HOME/gradle.properties
   repoUrlThirdParty = project.hasProperty('thirdPartyRepoUrl') ? project.getProperty('thirdPartyRepoUrl') : ''
@@ -28,6 +28,7 @@ ext {
   
   sourceEncoding = project.hasProperty('source_encoding') ? project.getProperty('source_encoding') : 'UTF-8'
   islocalDevelopment = project.hasProperty('local_development') ? 'true'.equals(project.getProperty('local_development')) : false
+
   publishWithTests = false
   publishWithoutDependencies = true
   publishFixScopeCompile = true // not really relevant
@@ -41,6 +42,13 @@ ext {
 	  {
 	    mavenLocal()
 	  }
+	  if (localReleasePath)
+	  {
+	    maven {
+	      name 'LocalRelease'
+	      url localReleasePath
+	    }
+	  }
 	  maven { 
 	    url repoUrlThirdParty 
 	  }
@@ -50,15 +58,22 @@ ext {
 archivesBaseName = "pf-${javaModuleNameSuffix}"
 
 configurations {
-    provided
-    implementation.extendsFrom(provided)
+  provided
+  implementation.extendsFrom(provided)
 }
 
-apply from: "${includePath}/java/publishing-java-full-g8.gradle"
+project.sourceCompatibility = project.ext.javaVersion
+project.targetCompatibility = project.ext.javaVersion
 
-signing {
-  sign publishing.publications.mavenJava
+tasks.withType(JavaCompile) {
+  sourceCompatibility = project.ext.javaVersion
+  targetCompatibility = project.ext.javaVersion
+  options.release = Integer.valueOf(project.ext.javaVersion)
+  options*.encoding = project.ext.sourceEncoding
+  options.compilerArgs << "-Xlint:unchecked"
 }
+
+apply from: "${includePath}/java/publishing-java-full-maven-central.gradle"
 
 dependencies {
   provided group: 'junit', name: 'junit', version: junit4Version
@@ -66,16 +81,6 @@ dependencies {
   
   testImplementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junit5Version
-}
-
-project.sourceCompatibility = javaVersion
-project.targetCompatibility = javaVersion
-
-tasks.withType(JavaCompile) {
-  sourceCompatibility = javaVersion
-  targetCompatibility = javaVersion
-  options*.encoding = project.ext.sourceEncoding
-  options.compilerArgs << "-Xlint:unchecked"
 }
 
 tasks.withType(Javadoc) {

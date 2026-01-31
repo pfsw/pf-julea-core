@@ -1,6 +1,6 @@
 # Release notes for pf-julea-core (JUnit Log Event Assertion Core)
 
-## Version 1.1.0 (30/01/2026), 13 Unit-Tests, 99.0% Coverage
+## Version 1.1.0 (31/01/2026), 13 Unit-Tests, 99.0% Coverage
 
 - Provide useful message for failed assertions 
 
