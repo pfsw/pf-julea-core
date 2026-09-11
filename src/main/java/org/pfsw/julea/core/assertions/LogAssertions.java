@@ -31,7 +31,7 @@ class LogAssertions
    */
   protected void assertLogEntry(LogEntriesTracker tracker, String... textElements)
   {
-    assertTrue.execute(tracker.hasLogEntryWith(textElements), createMessage("No log entry with message containg %s found", asString(textElements)));
+    assertTrue.execute(tracker.hasLogEntryWith(textElements), createMessage("No log entry with message containing %s found", asString(textElements)));
   }
 
   /**
@@ -42,7 +42,7 @@ class LogAssertions
    */
   protected void assertNoLogEntry(LogEntriesTracker tracker, String... textElements)
   {
-    assertFalse.execute(tracker.hasLogEntryWith(textElements), createMessage("Found unexpected log entry with message containg %s", asString(textElements)));
+    assertFalse.execute(tracker.hasLogEntryWith(textElements), createMessage("Found unexpected log entry with message containing %s", asString(textElements)));
   }
 
   /**
@@ -55,7 +55,7 @@ class LogAssertions
   protected void assertLogEntry(LogEntriesTracker tracker, LogLevel logLevel, String... textElements)
   {
     assertTrue.execute(tracker.hasLogEntryWith(logLevel, textElements),
-        createMessage("No log entry with log level '%s' and message containg %s found", logLevel.asString(), asString(textElements)));
+        createMessage("No log entry with log level '%s' and message containing %s found", logLevel.asString(), asString(textElements)));
   }
 
   /**
@@ -68,7 +68,7 @@ class LogAssertions
   protected void assertNoLogEntry(LogEntriesTracker tracker, LogLevel logLevel, String... textElements)
   {
     assertFalse.execute(tracker.hasLogEntryWith(logLevel, textElements),
-        createMessage("Found unexpected log entry with log level '%s' and message containg %s", logLevel.asString(), asString(textElements)));
+        createMessage("Found unexpected log entry with log level '%s' and message containing %s", logLevel.asString(), asString(textElements)));
   }
 
   /**
